@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using timesheet_api.Data;
 using timesheet_api.Data.Entities.User;
-using timesheet_api.Services;
 
 namespace timesheet_api.Controllers;
 
@@ -8,11 +8,11 @@ namespace timesheet_api.Controllers;
 [Route("api/users")]
 public class UserController : ControllerBase
 {
-    private readonly UserService _userService;
+    private readonly ITimesheetRepository _repository;
 
-    public UserController(UserService userService)
+    public UserController(ITimesheetRepository repository)
     {
-        _userService = userService; 
+        _repository = repository;
     }
 
     [HttpGet]
@@ -20,5 +20,12 @@ public class UserController : ControllerBase
     {
         // return _userService.GetAll();
         return Ok(new List<User>());
+    }
+
+    [HttpPost]
+    public ActionResult Create([FromBody]User user)
+    {
+        _repository.Save(user);
+        return Ok(user);
     }
 }

@@ -1,19 +1,43 @@
-var builder = WebApplication.CreateBuilder(args);
+﻿
+using Microsoft.EntityFrameworkCore;
+using timesheet_api.Data;
 
-// Add services to the container.
+namespace timesheet_api
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            var host = CreateHostBuilder(args).Build();
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
+            // // migrate the database.  Best practice = in Main, using service scope
+            // using (var scope = host.Services.CreateScope())
+            // {
+            //     try
+            //     {
+            //         var context = scope.ServiceProvider.GetService<TimesheetContext>();
+            //         // for demo purposes, delete the database & migrate on startup so 
+            //         // we can start with a clean slate
+            //         context.Database.EnsureDeleted();
+            //         context.Database.Migrate();
+            //     }
+            //     catch (Exception ex)
+            //     {
+            //         var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+            //         logger.LogError(ex, "An error occurred while migrating the database.");
+            //     }
+            // }
 
-var app = builder.Build();
+            // run the web app
+            host.Run();
+        }
 
-// Configure the HTTP request pipeline.
 
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
+    }
+}

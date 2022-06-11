@@ -2,6 +2,7 @@
 
 public enum TimeOffStatus
 {
+    Pending,
     Denied,
     Approved
 }
