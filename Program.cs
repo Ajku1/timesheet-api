@@ -10,15 +10,11 @@ namespace timesheet_api
         {
             var host = CreateHostBuilder(args).Build();
 
-            // migrate the database.  Best practice = in Main, using service scope
             using (var scope = host.Services.CreateScope())
             {
                 try
                 {
                     var context = scope.ServiceProvider.GetService<TimesheetContext>();
-                    // for demo purposes, delete the database & migrate on startup so 
-                    // we can start with a clean slate
-                    // context.Database.EnsureDeleted();
                     context.Database.Migrate();
                 }
                 catch (Exception ex)
@@ -28,7 +24,6 @@ namespace timesheet_api
                 }
             }
 
-            // run the web app
             host.Run();
         }
 
