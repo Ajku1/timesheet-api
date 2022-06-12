@@ -1,4 +1,4 @@
-﻿using timesheet_api.Data.Entities.TimeOff;
+﻿using timesheet_api.Data.Entities.TimeEntry;
 using timesheet_api.Data.Entities.User;
 
 namespace timesheet_api.Data;
@@ -24,10 +24,10 @@ public class TimeSheetRepository : ITimesheetRepository
             .ToList();
     }
 
-    public IEnumerable<TimeOff> GetTimeOffsPendingReview(int managerId)
+    public IEnumerable<TimeEntry> GetTimeEntriesPendingReview(int managerId)
     {
-        return _timesheetContext.TimeOff
-            .Where(timeOff => timeOff.ManagerId.Equals(managerId) && timeOff.Status == TimeOffStatus.Pending)
+        return _timesheetContext.TimeEntries
+            .Where(timeEntry => timeEntry.ManagerId.Equals(managerId) && timeEntry.Status == TimeEntryStatus.Pending)
             .ToList();
     }
 }

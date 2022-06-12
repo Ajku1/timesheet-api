@@ -18,12 +18,12 @@ public class UserController : ControllerBase
     [HttpGet]
     public ActionResult<IEnumerable<User>> Get()
     {
-        // return _userService.GetAll();
-        return Ok(new List<User>());
+        var users = _repository.GetUsers();
+        return Ok(users);
     }
 
     [HttpPost]
-    public ActionResult Create([FromBody]User user)
+    public ActionResult Create([FromBody] User user)
     {
         _repository.Save(user);
         return Ok(user);
