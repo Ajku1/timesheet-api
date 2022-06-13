@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using timesheet_api.Data;
 
 namespace timesheet_api
@@ -46,7 +45,7 @@ namespace timesheet_api
             using (var scope = scopeFactory.CreateScope())
             {
                 var seeder = scope.ServiceProvider.GetService<TimesheetSeeder>();
-                seeder.Seed();
+                seeder.SeedAsync().Wait();
             }
         }
     }

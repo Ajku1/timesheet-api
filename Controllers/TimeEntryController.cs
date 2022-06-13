@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using timesheet_api.Data;
 using timesheet_api.Data.Entities.TimeEntry;
 
@@ -15,7 +16,8 @@ public class TimeEntryController : ControllerBase
         _repository = repository;
     }
 
-    [HttpGet]
+    [HttpGet("pending-review")]
+    [Authorize]
     public ActionResult<IEnumerable<TimeEntry>> GetTimeEntriesPendingReview(int managerId)
     {
         var timeEntries = _repository.GetTimeEntriesPendingReview(managerId);

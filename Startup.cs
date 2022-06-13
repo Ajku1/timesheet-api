@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using timesheet_api.Data;
+using timesheet_api.Data.Entities.User;
 
 namespace timesheet_api
 {
@@ -18,14 +20,21 @@ namespace timesheet_api
             {
                 setupAction.ReturnHttpNotAcceptable = true;
             }).AddXmlDataContractSerializerFormatters();
-
-            services.AddTransient<TimesheetSeeder>();
-            services.AddScoped<ITimesheetRepository, TimeSheetRepository>();
-            services.AddCors();
+            
             services.AddDbContext<TimesheetContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("TimesheetDB"));
             });
+            
+            services.AddIdentity<User, IdentityRole>(config =>
+            {
+                config.User.RequireUniqueEmail = true;
+                
+            })
+                .AddEntityFrameworkStores<TimesheetContext>();
+            services.AddTransient<TimesheetSeeder>();
+            services.AddScoped<ITimesheetRepository, TimeSheetRepository>();
+            // services.AddCors();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -36,7 +45,8 @@ namespace timesheet_api
             }
 
             app.UseRouting();
-            app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+            // app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
