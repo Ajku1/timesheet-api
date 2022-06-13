@@ -10,6 +10,21 @@ namespace timesheet_api
         {
             var host = CreateHostBuilder(args).Build();
 
+            RunMigrations(host);
+            RunSeeder(host);
+
+            host.Run();
+        }
+
+        private static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
+
+        private static void RunMigrations(IHost host)
+        {
             using (var scope = host.Services.CreateScope())
             {
                 try
@@ -23,16 +38,16 @@ namespace timesheet_api
                     logger.LogError(ex, "An error occurred while migrating the database.");
                 }
             }
-
-            host.Run();
         }
 
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+        private static void RunSeeder(IHost host)
+        {
+            var scopeFactory = host.Services.GetService<IServiceScopeFactory>();
+            using (var scope = scopeFactory.CreateScope())
+            {
+                var seeder = scope.ServiceProvider.GetService<TimesheetSeeder>();
+                seeder.Seed();
+            }
+        }
     }
 }

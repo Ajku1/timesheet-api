@@ -19,6 +19,7 @@ namespace timesheet_api
                 setupAction.ReturnHttpNotAcceptable = true;
             }).AddXmlDataContractSerializerFormatters();
 
+            services.AddTransient<TimesheetSeeder>();
             services.AddScoped<ITimesheetRepository, TimeSheetRepository>();
             services.AddCors();
             services.AddDbContext<TimesheetContext>(options =>
