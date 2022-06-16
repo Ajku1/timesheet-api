@@ -19,8 +19,7 @@ public class UserController : ControllerBase
     public ActionResult<IEnumerable<User>> Get()
     {
         var users = _repository.GetUsers();
-        var json = new JsonResult(users);
-        return Ok(json);
+        return Ok(users);
     }
 
     [HttpPost]

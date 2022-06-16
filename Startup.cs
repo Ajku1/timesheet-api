@@ -7,17 +7,28 @@ namespace timesheet_api
 {
     public class Startup
     {
+        private readonly string _corsPolicyName = "CorsPolicy";
+        private readonly string _frontendOrigin = "http://localhost:4200";
+        public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
-
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddCors();
+            services.AddCors(options =>
+            {
+                options.AddPolicy(_corsPolicyName,
+                    policy =>
+                    {
+                        policy.WithOrigins(_frontendOrigin) 
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+            });
             
             services.AddDbContext<TimesheetContext>(options =>
             {
@@ -36,8 +47,10 @@ namespace timesheet_api
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseHsts();
+            app.UseHttpsRedirection();
             app.UseRouting();
-            app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+            app.UseCors(_corsPolicyName);
             app.UseAuthentication();
             app.UseAuthorization();
 

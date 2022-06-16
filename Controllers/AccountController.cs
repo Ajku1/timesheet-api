@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using timesheet_api.Data.Entities.User;
 using timesheet_api.Models;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace timesheet_api.Controllers;
 
@@ -24,13 +25,13 @@ public class AccountController : ControllerBase
             return BadRequest();
         }
 
-        await _signInManager.PasswordSignInAsync(
+        SignInResult signInResult = await _signInManager.PasswordSignInAsync(
             loginModel.Username,
             loginModel.Password,
             false,
             false
         );
-        return Ok(loginModel);
+        return signInResult.Succeeded ? Ok() : Unauthorized();
     }
 
     [HttpGet("logout")]
