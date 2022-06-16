@@ -16,10 +16,8 @@ namespace timesheet_api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers(setupAction =>
-            {
-                setupAction.ReturnHttpNotAcceptable = true;
-            }).AddXmlDataContractSerializerFormatters();
+            services.AddControllers();
+            services.AddCors();
             
             services.AddDbContext<TimesheetContext>(options =>
             {
@@ -34,18 +32,12 @@ namespace timesheet_api
                 .AddEntityFrameworkStores<TimesheetContext>();
             services.AddTransient<TimesheetSeeder>();
             services.AddScoped<ITimesheetRepository, TimeSheetRepository>();
-            // services.AddCors();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
             app.UseRouting();
-            // app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+            app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
             app.UseAuthentication();
             app.UseAuthorization();
 

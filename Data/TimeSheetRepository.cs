@@ -30,4 +30,12 @@ public class TimeSheetRepository : ITimesheetRepository
             .Where(timeEntry => timeEntry.ManagerId.Equals(managerId) && timeEntry.Status == TimeEntryStatus.Pending)
             .ToList();
     }
+
+    public TimeEntry ActOnTimeEntry(int timeEntryId, bool approved)
+    {
+        TimeEntry timeEntry = _timesheetContext.TimeEntries
+            .Single(timeEntry => timeEntry.Id.Equals(timeEntryId));
+        timeEntry.Status = approved ? TimeEntryStatus.Approved : TimeEntryStatus.Denied;
+        return _timesheetContext.TimeEntries.Update(timeEntry).Entity;
+    }
 }

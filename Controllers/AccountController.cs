@@ -17,24 +17,24 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult> Login([FromBody] LoginModel loginModel)
+    public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
     {
-        if (ModelState.IsValid)
+        if (loginModel == null || !ModelState.IsValid)
         {
-            await _signInManager.PasswordSignInAsync(
-                loginModel.Username,
-                loginModel.Password,
-                false,
-                false
-            );
-            return Ok();
+            return BadRequest();
         }
 
-        return Unauthorized();
+        await _signInManager.PasswordSignInAsync(
+            loginModel.Username,
+            loginModel.Password,
+            false,
+            false
+        );
+        return Ok(loginModel);
     }
 
     [HttpGet("logout")]
-    public async Task<ActionResult> Logout()
+    public async Task<IActionResult> Logout()
     {
         await _signInManager.SignOutAsync();
         return Ok();
