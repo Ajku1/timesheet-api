@@ -9,4 +9,5 @@ public interface ITimesheetRepository
     public IEnumerable<User> GetUsers();
     public IEnumerable<TimeEntry> GetTimeEntriesPendingReview(int managerId);
     public TimeEntry ActOnTimeEntry(int timeEntryId, bool approved);
+    public bool isEmailInUse(string email);
 }

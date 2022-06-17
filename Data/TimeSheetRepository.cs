@@ -14,7 +14,7 @@ public class TimeSheetRepository : ITimesheetRepository
 
     public object Save(object obj)
     {
-        var savedEntity =_timesheetContext.Add(obj);
+        var savedEntity = _timesheetContext.Add(obj);
         _timesheetContext.SaveChanges();
         return savedEntity.Entity;
     }
@@ -38,5 +38,10 @@ public class TimeSheetRepository : ITimesheetRepository
             .Single(timeEntry => timeEntry.Id.Equals(timeEntryId));
         timeEntry.Status = approved ? TimeEntryStatus.Approved : TimeEntryStatus.Denied;
         return _timesheetContext.TimeEntries.Update(timeEntry).Entity;
+    }
+
+    public bool isEmailInUse(string email)
+    {
+        return _timesheetContext.Users.Any(user => user.Email.Equals(email));
     }
 }

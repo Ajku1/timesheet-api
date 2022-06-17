@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using timesheet_api.Data;
 using timesheet_api.Data.Entities.User;
 using timesheet_api.Models;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
@@ -11,16 +12,18 @@ namespace timesheet_api.Controllers;
 public class AccountController : ControllerBase
 {
     private readonly SignInManager<User> _signInManager;
+    private readonly ITimesheetRepository _timesheetRepository;
 
-    public AccountController(SignInManager<User> signInManager)
+    public AccountController(SignInManager<User> signInManager, ITimesheetRepository timesheetRepository)
     {
         _signInManager = signInManager;
+        _timesheetRepository = timesheetRepository;
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
     {
-        if (loginModel == null || !ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
             return BadRequest();
         }
@@ -32,6 +35,35 @@ public class AccountController : ControllerBase
             false
         );
         return signInResult.Succeeded ? Ok() : Unauthorized();
+    }
+
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] RegisterModel registerModel)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
+        if (_timesheetRepository.isEmailInUse(registerModel.Email))
+        {
+            return Conflict();
+        }
+
+        User user = new User()
+        {
+            Name = registerModel.Name,
+            UserName = registerModel.Username,
+            Email = registerModel.Email,
+            ManagerId = registerModel.ManagerId
+        };
+        var result = await _signInManager.UserManager.CreateAsync(user, registerModel.Password);
+        if (result != IdentityResult.Success)
+        {
+            throw new InvalidOperationException("Failed to register user.");
+        }
+
+        return Ok();
     }
 
     [HttpGet("logout")]

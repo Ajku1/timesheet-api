@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using timesheet_api.Data;
 using timesheet_api.Data.Entities.User;
+using timesheet_api.Models;
 
 namespace timesheet_api.Controllers;
 
@@ -19,13 +20,7 @@ public class UserController : ControllerBase
     public ActionResult<IEnumerable<User>> Get()
     {
         var users = _repository.GetUsers();
-        return Ok(users);
-    }
-
-    [HttpPost]
-    public ActionResult Create([FromBody] User user)
-    {
-        _repository.Save(user);
-        return Ok(user);
+        var userModels = users.Select(user => new UserModel() { Id = user.Id, Name = user.Name });
+        return Ok(userModels);
     }
 }
