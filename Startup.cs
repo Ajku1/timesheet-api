@@ -8,7 +8,7 @@ namespace timesheet_api
     public class Startup
     {
         private readonly string _corsPolicyName = "CorsPolicy";
-        private readonly string _frontendOrigin = "http://localhost:4200";
+        private readonly string _frontendOrigin = "https://localhost:4200";
         public IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration)
@@ -24,22 +24,19 @@ namespace timesheet_api
                 options.AddPolicy(_corsPolicyName,
                     policy =>
                     {
-                        policy.WithOrigins(_frontendOrigin) 
+                        policy.WithOrigins(_frontendOrigin)
                             .AllowAnyHeader()
-                            .AllowAnyMethod();
+                            .AllowAnyMethod()
+                            .AllowCredentials();
                     });
             });
-            
+
             services.AddDbContext<TimesheetContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("TimesheetDB"));
             });
-            
-            services.AddIdentity<User, IdentityRole>(config =>
-            {
-                config.User.RequireUniqueEmail = true;
-                
-            })
+
+            services.AddIdentity<User, IdentityRole>(config => { config.User.RequireUniqueEmail = true; })
                 .AddEntityFrameworkStores<TimesheetContext>();
             services.AddTransient<TimesheetSeeder>();
             services.AddScoped<ITimesheetRepository, TimeSheetRepository>();
@@ -54,10 +51,7 @@ namespace timesheet_api
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }

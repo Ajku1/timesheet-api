@@ -34,7 +34,14 @@ public class AccountController : ControllerBase
             false,
             false
         );
-        return signInResult.Succeeded ? Ok() : Unauthorized();
+        if (signInResult.Succeeded == false)
+        {
+            return Unauthorized();
+        }
+
+        var loggedInUser = _timesheetRepository.getUser(loginModel.Username);
+        var userModel = new UserModel() { Id = loggedInUser.Id, Name = loggedInUser.Name };
+        return Ok(userModel);
     }
 
     [HttpPost("register")]

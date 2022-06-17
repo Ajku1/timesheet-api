@@ -20,7 +20,8 @@ public class UserController : ControllerBase
     public ActionResult<IEnumerable<User>> Get()
     {
         var users = _repository.GetUsers();
-        var userModels = users.Select(user => new UserModel() { Id = user.Id, Name = user.Name });
+        var userModels = users.Select(user => new UserModel()
+            { Id = user.Id, Name = user.Name, ManagerId = user.ManagerId });
         return Ok(userModels);
     }
 }

@@ -18,7 +18,7 @@ public class TimeEntryController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize]
+    // [Authorize]
     public ActionResult Create([FromBody] TimeEntryCreateModel timeEntryCreateModel)
     {
         TimeEntry timeEntryToCreate = new TimeEntry()
@@ -26,8 +26,8 @@ public class TimeEntryController : ControllerBase
             StartDate = timeEntryCreateModel.StartDate,
             EndDate = timeEntryCreateModel.EndDate,
             Hours = timeEntryCreateModel.Hours,
-            UserId = 1,
-            ManagerId = 2,
+            UserId = timeEntryCreateModel.UserId,
+            ManagerId = timeEntryCreateModel.ManagerId,
             Type = timeEntryCreateModel.Type,
             Status = TimeEntryStatus.Pending
         };
@@ -36,15 +36,15 @@ public class TimeEntryController : ControllerBase
     }
 
     [HttpGet("pending-review/{managerId}")]
-    [Authorize]
-    public ActionResult<IEnumerable<TimeEntry>> GetTimeEntriesPendingReview(int managerId)
+    // [Authorize]
+    public ActionResult<IEnumerable<TimeEntry>> GetTimeEntriesPendingReview(string managerId)
     {
         var timeEntries = _repository.GetTimeEntriesPendingReview(managerId);
         return Ok(timeEntries);
     }
 
     [HttpPost("pending-review")]
-    [Authorize]
+    // [Authorize]
     public ActionResult ActOnTimeEntry([FromBody] TimeEntryActionModel timeEntryActionModel)
     {
         TimeEntry updatedEntry =

@@ -25,6 +25,12 @@
     <ItemGroup>
       <Compile Remove="Migrations\TimesheetContextModelSnapshot.cs" />
       <Compile Remove="Migrations\20220613201919_InitialCreate.Designer.cs" />
+      <Compile Remove="Migrations\20220617170307_InitialCreate.cs" />
+      <Compile Remove="Migrations\20220617170307_InitialCreate.Designer.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Migrations" />
     </ItemGroup>
 
 </Project>

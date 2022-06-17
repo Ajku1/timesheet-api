@@ -25,7 +25,7 @@ public class TimeSheetRepository : ITimesheetRepository
             .ToList();
     }
 
-    public IEnumerable<TimeEntry> GetTimeEntriesPendingReview(int managerId)
+    public IEnumerable<TimeEntry> GetTimeEntriesPendingReview(string managerId)
     {
         return _timesheetContext.TimeEntries
             .Where(timeEntry => timeEntry.ManagerId.Equals(managerId) && timeEntry.Status == TimeEntryStatus.Pending)
@@ -43,5 +43,10 @@ public class TimeSheetRepository : ITimesheetRepository
     public bool isEmailInUse(string email)
     {
         return _timesheetContext.Users.Any(user => user.Email.Equals(email));
+    }
+
+    public User getUser(string username)
+    {
+        return _timesheetContext.Users.Single(user => user.UserName.Equals(username));
     }
 }

@@ -7,7 +7,9 @@ public interface ITimesheetRepository
 {
     public object Save(object obj);
     public IEnumerable<User> GetUsers();
-    public IEnumerable<TimeEntry> GetTimeEntriesPendingReview(int managerId);
+    public IEnumerable<TimeEntry> GetTimeEntriesPendingReview(string managerId);
     public TimeEntry ActOnTimeEntry(int timeEntryId, bool approved);
     public bool isEmailInUse(string email);
+
+    public User getUser(string id);
 }
