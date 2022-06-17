@@ -27,6 +27,7 @@ public class TimeEntryController : ControllerBase
             EndDate = timeEntryCreateModel.EndDate,
             Hours = timeEntryCreateModel.Hours,
             UserId = timeEntryCreateModel.UserId,
+            UserName = timeEntryCreateModel.UserName,
             ManagerId = timeEntryCreateModel.ManagerId,
             Type = timeEntryCreateModel.Type,
             Status = TimeEntryStatus.Pending
@@ -35,20 +36,21 @@ public class TimeEntryController : ControllerBase
         return Ok(timeEntry);
     }
 
-    [HttpGet("pending-review/{managerId}")]
-    // [Authorize]
-    public ActionResult<IEnumerable<TimeEntry>> GetTimeEntriesPendingReview(string managerId)
-    {
-        var timeEntries = _repository.GetTimeEntriesPendingReview(managerId);
-        return Ok(timeEntries);
-    }
-
     [HttpPost("pending-review")]
     // [Authorize]
-    public ActionResult ActOnTimeEntry([FromBody] TimeEntryActionModel timeEntryActionModel)
+    public ActionResult<IEnumerable<TimeEntry>> GetTimeEntries([FromBody] TimeEntriesGetModel timeEntriesGetModel)
+    {
+        var userTimeEntries = _repository.GetUserTimeEntries(timeEntriesGetModel.UserId);
+        var timeEntriesPendingReview = _repository.GetTimeEntriesPendingReview(timeEntriesGetModel.UserId);
+        return Ok(userTimeEntries.Concat(timeEntriesPendingReview));
+    }
+
+    [HttpPut("{id}/pending-review")]
+    // [Authorize]
+    public ActionResult ActOnTimeEntry(int id, [FromBody] TimeEntryActionModel timeEntryActionModel)
     {
         TimeEntry updatedEntry =
-            _repository.ActOnTimeEntry(timeEntryActionModel.TimeEntryId, timeEntryActionModel.Approved);
+            _repository.ActOnTimeEntry(id, timeEntryActionModel.Approved);
         return Ok(updatedEntry);
     }
 }

@@ -40,7 +40,8 @@ public class AccountController : ControllerBase
         }
 
         var loggedInUser = _timesheetRepository.getUser(loginModel.Username);
-        var userModel = new UserModel() { Id = loggedInUser.Id, Name = loggedInUser.Name };
+        var userModel = new UserModel()
+            { Id = loggedInUser.Id, Name = loggedInUser.Name, ManagerId = loggedInUser.ManagerId };
         return Ok(userModel);
     }
 
@@ -69,8 +70,10 @@ public class AccountController : ControllerBase
         {
             throw new InvalidOperationException("Failed to register user.");
         }
-
-        return Ok();
+        var registeredUser = _timesheetRepository.getUser(registerModel.Username);
+        var userModel = new UserModel()
+            { Id = registeredUser.Id, Name = registeredUser.Name, ManagerId = registeredUser.ManagerId };
+        return Ok(userModel);
     }
 
     [HttpGet("logout")]

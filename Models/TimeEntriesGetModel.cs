@@ -2,8 +2,8 @@
 
 namespace timesheet_api.Models;
 
-public class TimeEntryActionModel
+public class TimeEntriesGetModel
 {
     [Required]
-    public bool Approved { get; set; }
+    public string UserId { get; set; }
 }

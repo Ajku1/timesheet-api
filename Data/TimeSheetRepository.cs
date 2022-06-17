@@ -25,6 +25,13 @@ public class TimeSheetRepository : ITimesheetRepository
             .ToList();
     }
 
+    public IEnumerable<TimeEntry> GetUserTimeEntries(string userId)
+    {
+        return _timesheetContext.TimeEntries
+            .Where(timeEntry => timeEntry.UserId.Equals(userId))
+            .ToList();
+    }
+
     public IEnumerable<TimeEntry> GetTimeEntriesPendingReview(string managerId)
     {
         return _timesheetContext.TimeEntries
@@ -37,7 +44,9 @@ public class TimeSheetRepository : ITimesheetRepository
         TimeEntry timeEntry = _timesheetContext.TimeEntries
             .Single(timeEntry => timeEntry.Id.Equals(timeEntryId));
         timeEntry.Status = approved ? TimeEntryStatus.Approved : TimeEntryStatus.Denied;
-        return _timesheetContext.TimeEntries.Update(timeEntry).Entity;
+        var entityEntry = _timesheetContext.TimeEntries.Update(timeEntry);
+        _timesheetContext.SaveChanges();
+        return entityEntry.Entity;
     }
 
     public bool isEmailInUse(string email)
