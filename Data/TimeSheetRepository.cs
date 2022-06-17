@@ -12,10 +12,11 @@ public class TimeSheetRepository : ITimesheetRepository
         _timesheetContext = timesheetContext;
     }
 
-    public bool Save(object obj)
+    public object Save(object obj)
     {
-        _timesheetContext.Add(obj);
-        return _timesheetContext.SaveChanges() > 0;
+        var savedEntity =_timesheetContext.Add(obj);
+        _timesheetContext.SaveChanges();
+        return savedEntity.Entity;
     }
 
     public IEnumerable<User> GetUsers()

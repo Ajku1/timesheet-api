@@ -5,7 +5,7 @@ namespace timesheet_api.Data;
 
 public interface ITimesheetRepository
 {
-    public bool Save(object obj);
+    public object Save(object obj);
     public IEnumerable<User> GetUsers();
     public IEnumerable<TimeEntry> GetTimeEntriesPendingReview(int managerId);
     public TimeEntry ActOnTimeEntry(int timeEntryId, bool approved);

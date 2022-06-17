@@ -17,6 +17,24 @@ public class TimeEntryController : ControllerBase
         _repository = repository;
     }
 
+    [HttpPost]
+    [Authorize]
+    public ActionResult Create([FromBody] TimeEntryCreateModel timeEntryCreateModel)
+    {
+        TimeEntry timeEntryToCreate = new TimeEntry()
+        {
+            StartDate = timeEntryCreateModel.StartDate,
+            EndDate = timeEntryCreateModel.EndDate,
+            Hours = timeEntryCreateModel.Hours,
+            UserId = 1,
+            ManagerId = 2,
+            Type = timeEntryCreateModel.Type,
+            Status = TimeEntryStatus.Pending
+        };
+        var timeEntry = _repository.Save(timeEntryToCreate);
+        return Ok(timeEntry);
+    }
+
     [HttpGet("pending-review/{managerId}")]
     [Authorize]
     public ActionResult<IEnumerable<TimeEntry>> GetTimeEntriesPendingReview(int managerId)
