@@ -36,7 +36,14 @@ namespace timesheet_api
                 options.UseSqlServer(Configuration.GetConnectionString("TimesheetDB"));
             });
 
-            services.AddIdentity<User, IdentityRole>(config => { config.User.RequireUniqueEmail = true; })
+            services.AddIdentity<User, IdentityRole>(config =>
+                {
+                    config.User.RequireUniqueEmail = true;
+                    config.Password.RequireDigit = false;
+                    config.Password.RequireLowercase = false;
+                    config.Password.RequireUppercase = false;
+                    config.Password.RequireNonAlphanumeric = false;
+                })
                 .AddEntityFrameworkStores<TimesheetContext>();
             services.AddTransient<TimesheetSeeder>();
             services.AddScoped<ITimesheetRepository, TimeSheetRepository>();
