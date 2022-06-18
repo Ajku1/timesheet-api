@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using timesheet_api.Data;
 using timesheet_api.Data.Entities.TimeEntry;
 using timesheet_api.Models;
@@ -18,10 +17,9 @@ public class TimeEntryController : ControllerBase
     }
 
     [HttpPost]
-    // [Authorize]
     public ActionResult Create([FromBody] TimeEntryCreateModel timeEntryCreateModel)
     {
-        TimeEntry timeEntryToCreate = new TimeEntry()
+        TimeEntry timeEntryToCreate = new TimeEntry
         {
             StartDate = timeEntryCreateModel.StartDate,
             EndDate = timeEntryCreateModel.EndDate,
@@ -36,7 +34,6 @@ public class TimeEntryController : ControllerBase
     }
 
     [HttpPost("pending-review")]
-    // [Authorize]
     public ActionResult<IEnumerable<TimeEntry>> GetTimeEntries([FromBody] TimeEntriesGetModel timeEntriesGetModel)
     {
         var userTimeEntries = _repository.GetUserTimeEntries(timeEntriesGetModel.UserId);
@@ -45,11 +42,9 @@ public class TimeEntryController : ControllerBase
     }
 
     [HttpPut("{id}/pending-review")]
-    // [Authorize]
     public ActionResult ActOnTimeEntry(int id, [FromBody] TimeEntryActionModel timeEntryActionModel)
     {
-        TimeEntry updatedEntry =
-            _repository.ActOnTimeEntry(id, timeEntryActionModel.Approved);
+        TimeEntry updatedEntry = _repository.ActOnTimeEntry(id, timeEntryActionModel.Approved);
         return Ok(updatedEntry);
     }
 }

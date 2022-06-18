@@ -17,4 +17,5 @@ public interface ITimesheetRepository
     public IEnumerable<TimeEntryType> GetTimeEntryTypes();
     public TimeEntryType UpdateTimeEntryType(int id, TimeEntryTypeModel timeEntryTypeModel);
     public TimeEntryType GetTimeEntryType(int id);
+    public void DeleteTimeEntryType(int id);
 }

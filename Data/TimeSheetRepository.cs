@@ -90,4 +90,11 @@ public class TimeSheetRepository : ITimesheetRepository
     {
         return _timesheetContext.TimeEntryTypes.Single(timeEntryType => timeEntryType.Id == id);
     }
+
+    public void DeleteTimeEntryType(int id)
+    {
+        var timeEntryTypeToDelete = _timesheetContext.TimeEntryTypes.First(timeEntryType => timeEntryType.Id == id);
+        _timesheetContext.TimeEntryTypes.Remove(timeEntryTypeToDelete);
+        _timesheetContext.SaveChanges();
+    }
 }
