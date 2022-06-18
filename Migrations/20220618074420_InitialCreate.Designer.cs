@@ -12,7 +12,7 @@ using timesheet_api.Data;
 namespace timesheet_api.Migrations
 {
     [DbContext(typeof(TimesheetContext))]
-    [Migration("20220618065721_InitialCreate")]
+    [Migration("20220618074420_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -181,7 +181,7 @@ namespace timesheet_api.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int>("Type")
+                    b.Property<int>("TypeId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
@@ -192,9 +192,28 @@ namespace timesheet_api.Migrations
 
                     b.HasIndex("ManagerId");
 
+                    b.HasIndex("TypeId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("TimeEntries");
+                });
+
+            modelBuilder.Entity("timesheet_api.Data.Entities.TimeEntry.TimeEntryType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TimeEntryTypes");
                 });
 
             modelBuilder.Entity("timesheet_api.Data.Entities.User.User", b =>
@@ -331,6 +350,12 @@ namespace timesheet_api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("timesheet_api.Data.Entities.TimeEntry.TimeEntryType", "Type")
+                        .WithMany()
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("timesheet_api.Data.Entities.User.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -338,6 +363,8 @@ namespace timesheet_api.Migrations
                         .IsRequired();
 
                     b.Navigation("Manager");
+
+                    b.Navigation("Type");
 
                     b.Navigation("User");
                 });

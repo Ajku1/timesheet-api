@@ -12,4 +12,5 @@ public class TimesheetContext : IdentityDbContext<User>
     }
 
     public DbSet<TimeEntry> TimeEntries { get; set; }
+    public DbSet<TimeEntryType> TimeEntryTypes { get; set; }
 }

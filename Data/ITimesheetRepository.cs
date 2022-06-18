@@ -13,4 +13,5 @@ public interface ITimesheetRepository
     public bool isEmailInUse(string email);
 
     public User getUser(string id);
+    public IEnumerable<TimeEntryType> GetTimeEntryTypes();
 }

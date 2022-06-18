@@ -1,8 +1,7 @@
 ﻿namespace timesheet_api.Data.Entities.TimeEntry;
 
-public enum TimeEntryType
+public class TimeEntryType
 {
-    Work,
-    Holiday,
-    StudyBreak
+    public int Id { get; set; }
+    public string name { get; set; }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using Microsoft.AspNetCore.Identity;
+using timesheet_api.Data.Entities.TimeEntry;
 using timesheet_api.Data.Entities.User;
 
 namespace timesheet_api.Data;
@@ -11,7 +12,7 @@ public class TimesheetSeeder
     private readonly UserManager<User> _userManager;
 
     public TimesheetSeeder(
-        TimesheetContext timesheetContext, 
+        TimesheetContext timesheetContext,
         IWebHostEnvironment environment,
         UserManager<User> userManager)
     {
@@ -34,12 +35,24 @@ public class TimesheetSeeder
                 Role = UserRole.Administrator,
                 UserName = "Ajki"
             };
-            
+
             var result = await _userManager.CreateAsync(user, "P@ssw0rd!");
             if (result != IdentityResult.Success)
             {
                 throw new InvalidOperationException("Failed to create admin user in seeder.");
             }
+        }
+
+        if (!_timesheetContext.TimeEntryTypes.Any())
+        {
+            List<TimeEntryType> timeEntryTypes = new List<TimeEntryType>
+            {
+                new() { name = "Work" },
+                new() { name = "Holiday" },
+                new() { name = "Study Break" }
+            };
+            _timesheetContext.TimeEntryTypes.AddRange(timeEntryTypes);
+            await _timesheetContext.SaveChangesAsync();
         }
 
         if (!_timesheetContext.Users.Any())

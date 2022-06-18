@@ -28,7 +28,7 @@ public class TimeEntryController : ControllerBase
             Hours = timeEntryCreateModel.Hours,
             UserId = timeEntryCreateModel.UserId,
             ManagerId = timeEntryCreateModel.ManagerId,
-            Type = timeEntryCreateModel.Type,
+            TypeId = timeEntryCreateModel.Type.Id,
             Status = TimeEntryStatus.Pending
         };
         var timeEntry = _repository.Save(timeEntryToCreate);

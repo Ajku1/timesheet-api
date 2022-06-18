@@ -52,6 +52,19 @@ namespace timesheet_api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TimeEntryTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TimeEntryTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -169,7 +182,7 @@ namespace timesheet_api.Migrations
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Hours = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
-                    Type = table.Column<int>(type: "int", nullable: false)
+                    TypeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -179,11 +192,17 @@ namespace timesheet_api.Migrations
                         column: x => x.ManagerId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_TimeEntries_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_TimeEntries_TimeEntryTypes_TypeId",
+                        column: x => x.TypeId,
+                        principalTable: "TimeEntryTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -233,6 +252,11 @@ namespace timesheet_api.Migrations
                 column: "ManagerId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_TimeEntries_TypeId",
+                table: "TimeEntries",
+                column: "TypeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TimeEntries_UserId",
                 table: "TimeEntries",
                 column: "UserId");
@@ -263,6 +287,9 @@ namespace timesheet_api.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "TimeEntryTypes");
         }
     }
 }

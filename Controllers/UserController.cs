@@ -21,7 +21,12 @@ public class UserController : ControllerBase
     {
         var users = _repository.GetUsers();
         var userModels = users.Select(user => new UserModel()
-            { Id = user.Id, Name = user.Name, ManagerId = user.ManagerId });
+        {
+            Id = user.Id,
+            Name = user.Name,
+            ManagerId = user.ManagerId,
+            Role = user.Role
+        });
         return Ok(userModels);
     }
 }

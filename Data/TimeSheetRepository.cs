@@ -32,6 +32,7 @@ public class TimeSheetRepository : ITimesheetRepository
             .Where(timeEntry => timeEntry.UserId.Equals(userId))
             .Include(timeEntry => timeEntry.User)
             .Include(timeEntry => timeEntry.Manager)
+            .Include(timeEntry => timeEntry.Type)
             .ToList();
     }
 
@@ -41,6 +42,7 @@ public class TimeSheetRepository : ITimesheetRepository
             .Where(timeEntry => timeEntry.ManagerId.Equals(managerId) && timeEntry.Status == TimeEntryStatus.Pending)
             .Include(timeEntry => timeEntry.User)
             .Include(timeEntry => timeEntry.Manager)
+            .Include(timeEntry => timeEntry.Type)
             .ToList();
     }
 
@@ -49,6 +51,7 @@ public class TimeSheetRepository : ITimesheetRepository
         TimeEntry timeEntry = _timesheetContext.TimeEntries
             .Include(timeEntry => timeEntry.User)
             .Include(timeEntry => timeEntry.Manager)
+            .Include(timeEntry => timeEntry.Type)
             .Single(timeEntry => timeEntry.Id.Equals(timeEntryId));
         timeEntry.Status = approved ? TimeEntryStatus.Approved : TimeEntryStatus.Denied;
         var entityEntry = _timesheetContext.TimeEntries.Update(timeEntry);
@@ -64,5 +67,10 @@ public class TimeSheetRepository : ITimesheetRepository
     public User getUser(string username)
     {
         return _timesheetContext.Users.Single(user => user.UserName.Equals(username));
+    }
+
+    public IEnumerable<TimeEntryType> GetTimeEntryTypes()
+    {
+        return _timesheetContext.TimeEntryTypes.ToList();
     }
 }

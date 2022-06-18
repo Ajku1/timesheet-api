@@ -16,4 +16,7 @@ public class TimeEntry
     public int Hours { get; set; }
     public TimeEntryStatus Status { get; set; }
     public TimeEntryType Type { get; set; }
+    [ForeignKey("Type")]
+    public int TypeId { set; get; }
+
 }
