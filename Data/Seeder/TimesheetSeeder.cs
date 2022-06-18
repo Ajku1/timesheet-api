@@ -47,9 +47,9 @@ public class TimesheetSeeder
         {
             List<TimeEntryType> timeEntryTypes = new List<TimeEntryType>
             {
-                new() { name = "Work" },
-                new() { name = "Holiday" },
-                new() { name = "Study Break" }
+                new() { Name = "Work" },
+                new() { Name = "Holiday" },
+                new() { Name = "Study Break" }
             };
             _timesheetContext.TimeEntryTypes.AddRange(timeEntryTypes);
             await _timesheetContext.SaveChangesAsync();

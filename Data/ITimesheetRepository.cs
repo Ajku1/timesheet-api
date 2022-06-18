@@ -1,5 +1,6 @@
 ﻿using timesheet_api.Data.Entities.TimeEntry;
 using timesheet_api.Data.Entities.User;
+using timesheet_api.Models;
 
 namespace timesheet_api.Data;
 
@@ -14,4 +15,6 @@ public interface ITimesheetRepository
 
     public User getUser(string id);
     public IEnumerable<TimeEntryType> GetTimeEntryTypes();
+    public TimeEntryType UpdateTimeEntryType(int id, TimeEntryTypeModel timeEntryTypeModel);
+    public TimeEntryType GetTimeEntryType(int id);
 }

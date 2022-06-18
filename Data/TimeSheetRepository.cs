@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using timesheet_api.Data.Entities.TimeEntry;
 using timesheet_api.Data.Entities.User;
+using timesheet_api.Models;
 
 namespace timesheet_api.Data;
 
@@ -72,5 +73,21 @@ public class TimeSheetRepository : ITimesheetRepository
     public IEnumerable<TimeEntryType> GetTimeEntryTypes()
     {
         return _timesheetContext.TimeEntryTypes.ToList();
+    }
+
+    public TimeEntryType UpdateTimeEntryType(int id, TimeEntryTypeModel timeEntryTypeModel)
+    {
+        TimeEntryType timeEntryType = _timesheetContext.TimeEntryTypes
+            .Single(timeEntryType => timeEntryType.Id == id);
+        timeEntryType.Name = timeEntryTypeModel.Name;
+
+        var entityEntry = _timesheetContext.TimeEntryTypes.Update(timeEntryType);
+        _timesheetContext.SaveChanges();
+        return entityEntry.Entity;
+    }
+
+    public TimeEntryType GetTimeEntryType(int id)
+    {
+        return _timesheetContext.TimeEntryTypes.Single(timeEntryType => timeEntryType.Id == id);
     }
 }
