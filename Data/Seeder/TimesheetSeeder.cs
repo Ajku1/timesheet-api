@@ -22,7 +22,7 @@ public class TimesheetSeeder
 
     public async Task SeedAsync()
     {
-        _timesheetContext.Database.EnsureCreated();
+        await _timesheetContext.Database.EnsureCreatedAsync();
 
         User user = await _userManager.FindByEmailAsync("niki@abv.bg");
         if (user == null)

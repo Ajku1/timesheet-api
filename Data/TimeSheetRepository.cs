@@ -31,6 +31,7 @@ public class TimeSheetRepository : ITimesheetRepository
         return _timesheetContext.TimeEntries
             .Where(timeEntry => timeEntry.UserId.Equals(userId))
             .Include(timeEntry => timeEntry.User)
+            .Include(timeEntry => timeEntry.Manager)
             .ToList();
     }
 
@@ -39,6 +40,7 @@ public class TimeSheetRepository : ITimesheetRepository
         return _timesheetContext.TimeEntries
             .Where(timeEntry => timeEntry.ManagerId.Equals(managerId) && timeEntry.Status == TimeEntryStatus.Pending)
             .Include(timeEntry => timeEntry.User)
+            .Include(timeEntry => timeEntry.Manager)
             .ToList();
     }
 
@@ -46,6 +48,7 @@ public class TimeSheetRepository : ITimesheetRepository
     {
         TimeEntry timeEntry = _timesheetContext.TimeEntries
             .Include(timeEntry => timeEntry.User)
+            .Include(timeEntry => timeEntry.Manager)
             .Single(timeEntry => timeEntry.Id.Equals(timeEntryId));
         timeEntry.Status = approved ? TimeEntryStatus.Approved : TimeEntryStatus.Denied;
         var entityEntry = _timesheetContext.TimeEntries.Update(timeEntry);

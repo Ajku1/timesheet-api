@@ -164,7 +164,7 @@ namespace timesheet_api.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ManagerId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ManagerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Hours = table.Column<int>(type: "int", nullable: false),
@@ -174,6 +174,12 @@ namespace timesheet_api.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TimeEntries", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TimeEntries_AspNetUsers_ManagerId",
+                        column: x => x.ManagerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_TimeEntries_AspNetUsers_UserId",
                         column: x => x.UserId,
@@ -220,6 +226,11 @@ namespace timesheet_api.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TimeEntries_ManagerId",
+                table: "TimeEntries",
+                column: "ManagerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TimeEntries_UserId",
