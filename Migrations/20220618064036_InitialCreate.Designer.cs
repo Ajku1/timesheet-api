@@ -12,7 +12,7 @@ using timesheet_api.Data;
 namespace timesheet_api.Migrations
 {
     [DbContext(typeof(TimesheetContext))]
-    [Migration("20220617204845_InitialCreate")]
+    [Migration("20220618064036_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -186,13 +186,11 @@ namespace timesheet_api.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("TimeEntries");
                 });
@@ -321,6 +319,17 @@ namespace timesheet_api.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("timesheet_api.Data.Entities.TimeEntry.TimeEntry", b =>
+                {
+                    b.HasOne("timesheet_api.Data.Entities.User.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

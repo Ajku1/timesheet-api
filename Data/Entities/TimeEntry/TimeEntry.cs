@@ -1,10 +1,13 @@
-﻿namespace timesheet_api.Data.Entities.TimeEntry;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace timesheet_api.Data.Entities.TimeEntry;
 
 public class TimeEntry
 {
     public int Id { get; set; }
+    public User.User User { get; set; }
+    [ForeignKey("User")]
     public string UserId { get; set; }
-    public string UserName { get; set; }
     public string ManagerId { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }

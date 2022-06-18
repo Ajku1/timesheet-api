@@ -27,7 +27,6 @@ public class TimeEntryController : ControllerBase
             EndDate = timeEntryCreateModel.EndDate,
             Hours = timeEntryCreateModel.Hours,
             UserId = timeEntryCreateModel.UserId,
-            UserName = timeEntryCreateModel.UserName,
             ManagerId = timeEntryCreateModel.ManagerId,
             Type = timeEntryCreateModel.Type,
             Status = TimeEntryStatus.Pending

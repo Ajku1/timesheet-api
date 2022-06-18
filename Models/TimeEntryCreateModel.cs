@@ -7,8 +7,6 @@ public class TimeEntryCreateModel
 {
     [Required]
     public string UserId { get; set; }
-    [Required]
-    public string UserName { get; set; }
 
     [Required]
     public string ManagerId { get; set; }

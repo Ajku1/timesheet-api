@@ -1,4 +1,5 @@
-﻿using timesheet_api.Data.Entities.TimeEntry;
+﻿using Microsoft.EntityFrameworkCore;
+using timesheet_api.Data.Entities.TimeEntry;
 using timesheet_api.Data.Entities.User;
 
 namespace timesheet_api.Data;
@@ -29,6 +30,7 @@ public class TimeSheetRepository : ITimesheetRepository
     {
         return _timesheetContext.TimeEntries
             .Where(timeEntry => timeEntry.UserId.Equals(userId))
+            .Include(timeEntry => timeEntry.User)
             .ToList();
     }
 
@@ -36,12 +38,14 @@ public class TimeSheetRepository : ITimesheetRepository
     {
         return _timesheetContext.TimeEntries
             .Where(timeEntry => timeEntry.ManagerId.Equals(managerId) && timeEntry.Status == TimeEntryStatus.Pending)
+            .Include(timeEntry => timeEntry.User)
             .ToList();
     }
 
     public TimeEntry ActOnTimeEntry(int timeEntryId, bool approved)
     {
         TimeEntry timeEntry = _timesheetContext.TimeEntries
+            .Include(timeEntry => timeEntry.User)
             .Single(timeEntry => timeEntry.Id.Equals(timeEntryId));
         timeEntry.Status = approved ? TimeEntryStatus.Approved : TimeEntryStatus.Denied;
         var entityEntry = _timesheetContext.TimeEntries.Update(timeEntry);
