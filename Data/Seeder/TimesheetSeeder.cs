@@ -36,7 +36,7 @@ public class TimesheetSeeder
                 UserName = "Ajki"
             };
 
-            var result = await _userManager.CreateAsync(user, "P@ssw0rd!");
+            var result = await _userManager.CreateAsync(user, "123456");
             if (result != IdentityResult.Success)
             {
                 throw new InvalidOperationException("Failed to create admin user in seeder.");
